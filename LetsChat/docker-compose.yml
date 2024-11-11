@@ -5,7 +5,7 @@ services:
     image: sdelements/lets-chat
     restart: always
     environment:
-    LCB_DATABASE_URI: mongodb://mongo/letschat
+      LCB_DATABASE_URI: mongodb://mongo/letschat
     ports:
       - 80:8080
     depends_on:
@@ -15,4 +15,4 @@ services:
     image: mongo:3.4
     restart: always
     volumes:
-      - /opt/mongo:/data/db
+      - C:/bbdd/letschat:/data/db
