@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  drupal:
+    image: drupal:latest
+    container_name: drupal
+    ports:
+      - "8080:80"  # Mapea el puerto 80 del contenedor al puerto 8080 del host
+    volumes:
+      - drupal_data:/var/www/html
+    environment:
+      - DRUPAL_DB_HOST=db
+      - DRUPAL_DB_NAME=drupal
+      - DRUPAL_DB_USER=drupal
+      - DRUPAL_DB_PASSWORD=drupal_password
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7  # O puedes usar mariadb:latest si prefieres MariaDB
+    container_name: drupal_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: drupal
+      MYSQL_USER: drupal
+      MYSQL_PASSWORD: drupal_password
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  drupal_data:
+  db_data:

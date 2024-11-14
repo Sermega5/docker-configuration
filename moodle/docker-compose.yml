@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  moodle:
+    image: moodlehq/moodle-php-apache:8.3
+    container_name: moodle
+    environment:
+      - MOODLE_DB_HOST=db
+      - MOODLE_DB_NAME=moodle
+      - MOODLE_DB_USER=moodleuser
+      - MOODLE_DB_PASSWORD=moodlepassword
+      - MOODLE_URL=http://localhost
+    volumes:
+      - moodle_data:/var/www/html
+    depends_on:
+      - db
+    networks:
+      - moodle_net
+    expose:
+      - "80" # Este puerto es accesible desde Nginx
+
+  db:
+    image: mariadb:latest
+    container_name: moodle_db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: moodle
+      MYSQL_USER: moodleuser
+      MYSQL_PASSWORD: moodlepassword
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - moodle_net
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - moodle_data:/var/www/html
+    ports:
+      - "80:80" # Nginx escucha en el puerto 80
+    depends_on:
+      - moodle
+    networks:
+      - moodle_net
+
+volumes:
+  moodle_data:
+  db_data:
+
+networks:
+  moodle_net:
+    driver: bridge
