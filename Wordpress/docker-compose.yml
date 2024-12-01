@@ -1,0 +1,43 @@
+services:
+  mysqlwp:
+    container_name: wordpress_database
+    image: mysql
+    ports:
+      - 3307:3306
+    restart: always
+    volumes:
+      - C:/wordpressDocker/Wordpress_db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: $SQL_ROOT_PWD
+      MYSQL_USER: $SQL_USER
+      MYSQL_PASSWORD: $SQL_PASSWD
+      MYSQL_DATABASE: $SQL_DBNAME
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_unicode_ci
+    networks:
+      net: 
+        ipv4_address: 172.28.1.2
+
+  web:
+    container_name: wordpress_www
+    image: wordpress
+    ports:
+      - 81:80
+    restart: always
+    volumes:
+      - C:/wordpressDocker/Wordpress_data:/var/www/html
+    environment:
+      WORDPRESS_DB_HOST: mysqlwp
+      WORDPRESS_DB_USER: $SQL_USER
+      WORDPRESS_DB_PASSWORD: $SQL_PASSWD
+      WORDPRESS_DB_NAME: $SQL_DBNAME
+    networks:
+      net: 
+        ipv4_address: 172.28.1.3
+
+networks:
+  net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.1.0/24
