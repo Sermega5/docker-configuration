@@ -1,0 +1,20 @@
+services:
+  www:
+    build:
+      context: .
+    container_name: frontend
+    command: ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
+    tty: true
+    ports:
+      - 86:80
+
+    networks:
+      net:
+        ipv4_address: 172.30.2.5
+
+networks:
+  net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.2.0/24
