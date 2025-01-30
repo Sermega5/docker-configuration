@@ -1,7 +1,8 @@
 FROM ubuntu:24.04
 ARG DEBIAN_FRONTEND=noninteractive
 RUN  apt update --fix-missing -y && apt upgrade -y
-ENV DATABASE_URL=mysql://4vtest:abcd1234@10.10.5.45:3306/bbddentrega?serverVersion=10.6.18-MariaDB&charset=utf8mb4
+
+ENV DATABASE_URL=mysql://username:password@dbHost:3306/databaseName?serverVersion=10.6.18-MariaDB&charset=utf8mb4
 RUN apt install -y apt-utils git rsync nano vim unzip curl wget software-properties-common git
 RUN LC_ALL=C.UTF-8 add-apt-repository -y ppa:ondrej/php
 
@@ -13,10 +14,13 @@ ENV APACHE_LOG_DIR /var/log/apache2
 RUN rm /var/www/html/*
 RUN rm /etc/apache2/sites-enabled/000-default.conf
 COPY backend.conf /etc/apache2/sites-enabled/backend.conf
-
+RUN curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 COPY www/. /var/www/html
 RUN chown www-data:www-data -R /var/www/html/*
+RUN cd /var/www/html && COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader
 
 RUN a2enmod rewrite headers
 RUN service apache2 restart
 WORKDIR /var/www/html/
+EXPOSE 80
+CMD ["apache2ctl", "-D", "FOREGROUND"]
