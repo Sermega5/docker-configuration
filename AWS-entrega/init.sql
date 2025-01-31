@@ -1,18 +1,3 @@
-CREATE TABLE IF NOT EXISTS `apartment` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `occupied` tinyint(1) NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `direction` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `price` int NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-DELETE FROM `apartment`;
-INSERT INTO `apartment` (`id`, `description`, `occupied`, `title`, `direction`, `price`) VALUES
-	(1, 'Piso 4 Habitaciones y 2 Baños en una zona muy bien comunicada', 0, 'Piso Sancho el Fuerte', 'Sancho el Fuerte 27 5C', 980),
-	(2, 'Apartamento 1 Hab recien reformado', 0, 'Piso Casco Viejo', 'San Nicolas 21 3ºDR', 550);
-
 CREATE TABLE IF NOT EXISTS `client` (
   `id` int NOT NULL AUTO_INCREMENT,
   `api_key` char(36) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '(DC2Type:guid)',
@@ -23,14 +8,20 @@ DELETE FROM `client`;
 INSERT INTO `client` (`id`, `api_key`) VALUES
 	(1, '1234');
 
-CREATE TABLE IF NOT EXISTS `doctrine_migration_versions` (
-  `version` varchar(191) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `executed_at` datetime DEFAULT NULL,
-  `execution_time` int DEFAULT NULL,
-  PRIMARY KEY (`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+CREATE TABLE IF NOT EXISTS `apartment` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `direction` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `price` int NOT NULL,
+  `occupied` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-DELETE FROM `doctrine_migration_versions`;
+DELETE FROM `apartment`;
+INSERT INTO `apartment` (`id`, `title`, `description`, `direction`, `price`, `occupied`) VALUES
+	(1, 'Piso Sancho el Fuerte', 'Piso 4 Habitaciones y 2 Baños en una zona muy bien comunicada', 'Sancho el Fuerte 27 5C', 980, 0),
+	(2, 'Piso Casco Viejo', 'Apartamento 1 Hab recien reformado', 'San Nicolas 21 3ºDR', 550, 0);
 
 CREATE TABLE IF NOT EXISTS `photo` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -63,3 +54,12 @@ CREATE TABLE IF NOT EXISTS `reservation` (
 DELETE FROM `reservation`;
 INSERT INTO `reservation` (`id`, `apartment_id`, `start_date`, `end_date`, `cancelled`, `cancellation_date`, `reservation_contact`) VALUES
 	(1, 1, '2025-01-23 11:04:55', '2026-01-24 11:04:57', 0, NULL, 'juan.perez@gmail.com');
+
+CREATE TABLE IF NOT EXISTS `doctrine_migration_versions` (
+  `version` varchar(191) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `executed_at` datetime DEFAULT NULL,
+  `execution_time` int DEFAULT NULL,
+  PRIMARY KEY (`version`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+DELETE FROM `doctrine_migration_versions`;
